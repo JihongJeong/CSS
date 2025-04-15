@@ -1,0 +1,7 @@
+praw==7.8.1
+pandas==2.2.1
+python-dotenv==1.0.0
+nltk==3.8.1
+textblob==0.17.1
+matplotlib==3.8.0
+seaborn==0.13.0 
