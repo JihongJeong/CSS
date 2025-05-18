@@ -86,7 +86,7 @@ python reddit_collect.py
 python reddit_analysis.py 
 ```
 each scripts are for:
-- downloading nttk resources
+- downloading nltk resources
 - collecting reddit posts
 - sentiment analysis and topic modeling with collected posts
 
@@ -100,9 +100,9 @@ When the script runs, you can expect the following outputs:
     *   LDA topic modeling results for each subreddit (top words per topic, Coherence Score).
 2.  **Matplotlib Visualizations**:
     *   A bar chart showing the sentiment label distribution per subreddit.
-    *   Word cloud images for each topic within each subreddit. (These will appear in separate windows during execution).
+    *   Word cloud images for each topic within each subreddit.
 3.  **CSV File (Optional)**:
-    *   If you uncomment the `collected_df.to_csv(...)` line at the end of the script, the DataFrame containing the analysis results will be saved to a CSV file.
+    *   The DataFrame containing the analysis results will be saved to a CSV file.
 
 ## Troubleshooting
 
