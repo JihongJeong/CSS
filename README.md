@@ -1,115 +1,101 @@
-# Reddit Sentiment Analysis
+### `README.md` (English)
 
-This project crawls Reddit posts using the Reddit API and performs sentiment analysis on the collected data. It includes both data collection and sentiment analysis components.
+# Reddit Subreddit-Specific Sentiment and Topic Analysis for Generative AI
 
-## Features
+This Python script collects posts containing the keywords 'generative ai' or 'chatgpt' from specified Reddit subreddits. It then analyzes user sentiment and identifies key discussion topics for each subreddit. The analysis utilizes VADER for sentiment analysis and LDA (Latent Dirichlet Allocation) for topic modeling.
 
-### Data Collection
-- Crawls posts from specified subreddits using PRAW (Python Reddit API Wrapper)
-- Collects post information including:
-  - Title
-  - Score (upvotes - downvotes)
-  - Post ID
-  - URL
-  - Creation timestamp
-  - Author
-  - Number of comments
-  - Post content (selftext)
-- Saves data in both JSON and CSV formats
+## Key Features
 
-### Sentiment Analysis
-- Text Preprocessing:
-  - Case normalization
-  - Special character removal
-  - Tokenization
-  - Stop word removal
-  - Lemmatization
-- Sentiment Scoring:
-  - Analyzes text sentiment using TextBlob
-  - Calculates positive, negative, and neutral scores
-  - Normalizes Reddit scores (0-1 range) for weighted sentiment calculation
-  - Aggregates sentiment scores by date
-- Visualization:
-  - Generates time series plots of sentiment trends
-  - Shows daily positive, negative, and neutral sentiment scores
-  - Includes grid lines for better readability
+-   **Targeted Subreddit Data Collection**: Gathers relevant posts from multiple user-specified subreddits.
+-   **Keyword-Based Filtering**: Focuses on posts containing 'generative ai' or 'chatgpt'.
+-   **Date Range Filtering**: Collects posts only within a specified period.
+-   **Text Preprocessing**: Performs lowercasing, noise removal, stop-word removal, and lemmatization on the collected text data.
+-   **VADER Sentiment Analysis**: Classifies the sentiment of each post as 'Positive', 'Negative', or 'Neutral'. Visualizes the average sentiment score and sentiment label distribution per subreddit.
+-   **LDA Topic Modeling**: Extracts key discussion topics for each subreddit and visualizes the representative words for each topic as word clouds.
+-   **API Request Management**: Includes delays between API requests to avoid hitting Reddit API rate limits.
+
+## Prerequisites
+
+1.  **Python**: Python 3.7 or higher must be installed.
+2.  **Reddit API Credentials**:
+    *   Log in to your Reddit account and create a 'script' type application at [https://www.reddit.com/prefs/apps](https://www.reddit.com/prefs/apps).
+    *   Prepare your `client_id` (found under "personal use script"), `client_secret` (next to "secret"), and a `user_agent` string (you can define this freely, e.g., `python:myKeywordSubredditScraper:v1.0 (by /u/your_username)`).
+
 
 ## Installation
 
-1. Install required packages:
-```bash
-pip install -r requirements.txt
+1.  **Download the Script**: Clone this repository or download the script file directly.
+    ```bash
+    # git clone <repository_url> # If using a repository
+    # cd <repository_name>
+    ```
+
+2.  **Install Required Libraries**:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+## Configuration
+
+You need to modify the following variables at the top of the script according to your environment and analysis goals:
+
+```python
+# --- User Settings ---
+CLIENT_ID = "YOUR_CLIENT_ID_HERE"
+CLIENT_SECRET = "YOUR_CLIENT_SECRET_HERE"
+USER_AGENT = "python:myKeywordSubredditScraper:v1.0 (by /u/your_username)" # Example
+
+KEYWORDS = ['generative ai', 'chatgpt']
+TARGET_SUBREDDITS = ['artificialintelligence', 'MachineLearning', 'ChatGPT', 'singularity', 'technology', 'datascience', 'futurology']
+START_DATE_STR = "2022-01-01"
+END_DATE_STR = "2023-12-31"
+POST_LIMIT_PER_KEYWORD_SUBREDDIT = 50
+MIN_POSTS_FOR_TOPIC_MODELING = 10
+NUM_TOPICS_PER_SUBREDDIT = 5
 ```
 
-2. Set up Reddit API credentials:
-   - Go to https://www.reddit.com/prefs/apps
-   - Click "Create Application" or "Create Another App"
-   - Select "script" for application type
-   - Fill in the name and description
-   - Set redirect uri to `http://localhost:8080`
-   - Note down the generated client_id and client_secret
-
-3. Configure environment variables:
-   - Create a `.env` file in the project root
-   - Add the following variables:
-```
-REDDIT_CLIENT_ID=your_client_id_here
-REDDIT_CLIENT_SECRET=your_client_secret_here
-REDDIT_USER_AGENT="python:my_reddit_crawler:v1.0 (by /u/your_username)"
-```
+-   `CLIENT_ID`, `CLIENT_SECRET`, `USER_AGENT`: Replace with your Reddit API credentials.
+-   `KEYWORDS`: Specify the keywords to search for.
+-   `TARGET_SUBREDDITS`: A list of subreddits to analyze.
+-   `START_DATE_STR`, `END_DATE_STR`: The period for data collection.
+-   `POST_LIMIT_PER_KEYWORD_SUBREDDIT`: The maximum number of posts to collect per subreddit and keyword combination. Adjust this considering API limits and execution time.
+-   `MIN_POSTS_FOR_TOPIC_MODELING`: The minimum number of posts required to perform topic modeling for a subreddit.
+-   `NUM_TOPICS_PER_SUBREDDIT`: The number of topics to generate for each subreddit.
 
 ## Usage
 
-### Data Collection
+Once all configurations are set, run the script from your terminal:
+
 ```bash
-python reddit_crawler.py
+python download_nltk.py #for downloading nttk resources
+python reddit_collect.py #for collecting reddit posts
+python reddit_analysis.py #for sentiment analysis and topic modeling with collected posts
 ```
-This will:
-- Crawl posts from the specified subreddit
-- Save the results in JSON format
-- Default configuration crawls 100 'hot' posts from r/python
 
-### Sentiment Analysis
-```bash
-python sentiment_analysis.py
-```
-This will:
-- Load the crawled Reddit data
-- Perform text preprocessing and sentiment analysis
-- Generate visualization of sentiment trends
-- Save results in:
-  - `sentiment_trends.png`: Time series plot of sentiment scores
-  - `daily_sentiment_scores.csv`: Daily aggregated sentiment data
 
-## Technical Details
+## Expected Output
 
-### Score Normalization
-- Reddit scores (upvotes - downvotes) are normalized to 0-1 range
-- Normalization process:
-  1. Handles negative scores by shifting all scores to positive range
-  2. Divides by maximum score to get 0-1 range
-  3. Uses 0.5 as default when all scores are 0
-- Normalized scores are used as weights for sentiment scores
+When the script runs, you can expect the following outputs:
 
-### Sentiment Calculation
-- TextBlob's polarity score determines sentiment direction
-- Sentiment categories:
-  - Positive: polarity > 0
-  - Negative: polarity < 0
-  - Neutral: polarity = 0
-- Final scores are weighted by normalized Reddit scores
+1.  **Console Output**:
+    *   Progress of data collection and the number of posts collected from each subreddit.
+    *   Overall and per-subreddit sentiment analysis results (average compound score, sentiment label distribution).
+    *   LDA topic modeling results for each subreddit (top words per topic, Coherence Score).
+2.  **Matplotlib Visualizations**:
+    *   A bar chart showing the sentiment label distribution per subreddit.
+    *   Word cloud images for each topic within each subreddit. (These will appear in separate windows during execution).
+3.  **CSV File (Optional)**:
+    *   If you uncomment the `collected_df.to_csv(...)` line at the end of the script, the DataFrame containing the analysis results will be saved to a CSV file.
 
-## Output Files
+## Troubleshooting
 
-1. Data Collection:
-   - `reddit_[subreddit]_[date].json`: Raw crawled data
-   - `reddit_[subreddit]_[date].csv`: Optional CSV format data
+-   **PRAW Errors (e.g., `praw.exceptions.ResponseException: received 401 HTTP response`)**: Double-check your `CLIENT_ID`, `CLIENT_SECRET`, and `USER_AGENT` credentials.
+-   **NLTK Resource Errors (`LookupError`)**: Re-run the NLTK resource download steps in the 'Prerequisites' section.
+-   **API Rate Limit**: Try reducing the `POST_LIMIT_PER_KEYWORD_SUBREDDIT` value or increasing the `time.sleep()` values within the script.
+-   **Insufficient Data**: There might not be enough posts matching your criteria (period, keywords, subreddits). Try changing the settings. Topic modeling might not be performed if a subreddit doesn't meet the `MIN_POSTS_FOR_TOPIC_MODELING` threshold.
+-   **LDA Model Training Errors**: This can happen if the number of documents is very small, or if all words are filtered out after preprocessing, resulting in an empty corpus. Check `MIN_POSTS_FOR_TOPIC_MODELING` and ensure you have enough data.
 
-2. Sentiment Analysis:
-   - `sentiment_trends.png`: Visualization of sentiment trends
-   - `daily_sentiment_scores.csv`: Daily sentiment scores with columns:
-     - date: Analysis date
-     - positive: Aggregated positive sentiment score
-     - negative: Aggregated negative sentiment score
-     - neutral: Aggregated neutral sentiment score
-     - normalized_score: Average normalized Reddit score for the day 
+## Contributing
+
+Suggestions for improvements or bug fixes are always welcome. Feel free to open an issue or submit a pull request.
+
