@@ -1,5 +1,3 @@
-### `README.md` (English)
-
 # Reddit Subreddit-Specific Sentiment and Topic Analysis for Generative AI
 
 This Python script collects posts containing the keywords 'generative ai' or 'chatgpt' from specified Reddit subreddits. It then analyzes user sentiment and identifies key discussion topics for each subreddit. The analysis utilizes VADER for sentiment analysis and LDA (Latent Dirichlet Allocation) for topic modeling.
@@ -41,37 +39,56 @@ You need to modify the following variables at the top of the script according to
 
 ```python
 # --- User Settings ---
-CLIENT_ID = "YOUR_CLIENT_ID_HERE"
-CLIENT_SECRET = "YOUR_CLIENT_SECRET_HERE"
-USER_AGENT = "python:myKeywordSubredditScraper:v1.0 (by /u/your_username)" # Example
-
-KEYWORDS = ['generative ai', 'chatgpt']
-TARGET_SUBREDDITS = ['artificialintelligence', 'MachineLearning', 'ChatGPT', 'singularity', 'technology', 'datascience', 'futurology']
+CLIENT_ID = os.getenv("REDDIT_CLIENT_ID") 
+CLIENT_SECRET = os.getenv("REDDIT_CLIENT_SECRET")
+USER_AGENT = os.getenv("REDDIT_USER_AGENT")
+KEYWORDS = ["generative ai", "chatgpt"] 
+SUBREDDITS = ["Artificial",
+              "MachineLearning",
+              "DeepLearning",
+              "GenerativeAI",
+              "OpenAI",
+              "StableDiffusion",
+              "LanguageTechnology",
+              "ComputerVision",
+              "DeepFakes",
+              "MLQuestions",
+              "Design",
+              "photography",
+              "Entrepreneur",
+              "marketing",
+              "education",
+              "gamedev",
+              "architecture",
+              "writing",
+              "Finance",
+              "healthcare"
+              ] 
 START_DATE_STR = "2022-01-01"
-END_DATE_STR = "2023-12-31"
-POST_LIMIT_PER_KEYWORD_SUBREDDIT = 50
-MIN_POSTS_FOR_TOPIC_MODELING = 10
-NUM_TOPICS_PER_SUBREDDIT = 5
+END_DATE_STR = "2025-04-30"
+POST_LIMIT_PER_SUBREDDIT = 1000
 ```
 
--   `CLIENT_ID`, `CLIENT_SECRET`, `USER_AGENT`: Replace with your Reddit API credentials.
+-   `CLIENT_ID`, `CLIENT_SECRET`, `USER_AGENT`: create your own .env file with your Reddit API credentials.
 -   `KEYWORDS`: Specify the keywords to search for.
 -   `TARGET_SUBREDDITS`: A list of subreddits to analyze.
 -   `START_DATE_STR`, `END_DATE_STR`: The period for data collection.
 -   `POST_LIMIT_PER_KEYWORD_SUBREDDIT`: The maximum number of posts to collect per subreddit and keyword combination. Adjust this considering API limits and execution time.
--   `MIN_POSTS_FOR_TOPIC_MODELING`: The minimum number of posts required to perform topic modeling for a subreddit.
--   `NUM_TOPICS_PER_SUBREDDIT`: The number of topics to generate for each subreddit.
+
 
 ## Usage
 
 Once all configurations are set, run the script from your terminal:
 
 ```bash
-python download_nltk.py #for downloading nttk resources
-python reddit_collect.py #for collecting reddit posts
-python reddit_analysis.py #for sentiment analysis and topic modeling with collected posts
+python download_nltk.py 
+python reddit_collect.py 
+python reddit_analysis.py 
 ```
-
+each scripts are for:
+- downloading nttk resources
+- collecting reddit posts
+- sentiment analysis and topic modeling with collected posts
 
 ## Expected Output
 
